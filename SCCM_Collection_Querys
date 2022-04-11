@@ -1,0 +1,29 @@
+# Gibt Clients oder User aus einer bestimmten AD OU zurück 
+select SMS_R_SYSTEM.ResourceID,SMS_R_SYSTEM.ResourceType,SMS_R_SYSTEM.Name,SMS_R_SYSTEM.SMSUniqueIdentifier,SMS_R_SYSTEM.ResourceDomainORWorkgroup,SMS_R_SYSTEM.Client from SMS_R_System where SMS_R_System.SystemOUName = "INTERHYP-INTERN.DE/DEMUC/COMPUTERS/WIN7/DESKTOP/BESPRECHUNGSRAEUME" or SMS_R_System.SystemOUName = "INTERHYP-CONTOSO.COM/COMPUTERS"
+
+# Gibt Clients oder User aus einer bestimmten AD Gruppe zurück 
+select SMS_R_SYSTEM.ResourceID,SMS_R_SYSTEM.ResourceType,SMS_R_SYSTEM.Name,SMS_R_SYSTEM.SMSUniqueIdentifier,SMS_R_SYSTEM.ResourceDomainORWorkgroup,SMS_R_SYSTEM.Client from SMS_R_System where SMS_R_System.SystemGroupName = "CONTOSO\\SCCMGRUPPE"
+
+# Gibt Clients mit einer bestimmten Application und bestimmter Version zurück 
+select SMS_R_SYSTEM.ResourceID,SMS_R_SYSTEM.ResourceType,SMS_R_SYSTEM.Name,SMS_R_SYSTEM.SMSUniqueIdentifier,SMS_R_SYSTEM.ResourceDomainORWorkgroup,SMS_R_SYSTEM.Client from SMS_R_System inner join SMS_G_System_INSTALLED_SOFTWARE on SMS_G_System_INSTALLED_SOFTWARE.ResourceId = SMS_R_System.ResourceId where SMS_G_System_INSTALLED_SOFTWARE.ARPDisplayName = "<APPLICATIONNAME>" and SMS_G_System_INSTALLED_SOFTWARE.ProductVersion > "7.7%"
+
+# Gibt Clients die keinen Agent haben zurück
+select SMS_R_SYSTEM.ResourceID,SMS_R_SYSTEM.ResourceType,SMS_R_SYSTEM.Name,SMS_R_SYSTEM.SMSUniqueIdentifier,SMS_R_SYSTEM.ResourceDomainORWorkgroup,SMS_R_SYSTEM.Client from SMS_R_System where SMS_R_System.Client is null
+
+# Gibt Clients eines bestimmten OU Builds 
+select SMS_R_SYSTEM.ResourceID,SMS_R_SYSTEM.ResourceType,SMS_R_SYSTEM.Name,SMS_R_SYSTEM.SMSUniqueIdentifier,SMS_R_SYSTEM.ResourceDomainORWorkgroup,SMS_R_SYSTEM.Client from SMS_R_System inner join SMS_G_System_OPERATING_SYSTEM on SMS_G_System_OPERATING_SYSTEM.ResourceId = SMS_R_System.ResourceId where SMS_G_System_OPERATING_SYSTEM.Version = "10.0.19043"
+
+# Gibt Clients eines bestimmten Models zurück 
+select SMS_R_SYSTEM.ResourceID,SMS_R_SYSTEM.ResourceType,SMS_R_SYSTEM.Name,SMS_R_SYSTEM.SMSUniqueIdentifier,SMS_R_SYSTEM.ResourceDomainORWorkgroup,SMS_R_SYSTEM.Client from SMS_R_System inner join SMS_G_System_COMPUTER_SYSTEM on SMS_G_System_COMPUTER_SYSTEM.ResourceId = SMS_R_System.ResourceId where SMS_G_System_COMPUTER_SYSTEM.Model like "HP EliteBook 840 G7 Notebook PC"
+
+# Gibt Clients einer bestimmten TPM Version zurück 
+select SMS_R_SYSTEM.ResourceID,SMS_R_SYSTEM.ResourceType,SMS_R_SYSTEM.Name,SMS_R_SYSTEM.SMSUniqueIdentifier,SMS_R_SYSTEM.ResourceDomainORWorkgroup,SMS_R_SYSTEM.Client from SMS_R_System inner join SMS_G_System_TPM on SMS_G_System_TPM.ResourceID = SMS_R_System.ResourceId where SMS_G_System_TPM.SpecVersion = "2.0, 0, 1.16" or SMS_G_System_TPM.SpecVersion = "2.0, 0, 1.38"
+
+# Gibt Clients OHNE UEFI zurück
+select SMS_R_SYSTEM.ResourceID,SMS_R_SYSTEM.ResourceType,SMS_R_SYSTEM.Name,SMS_R_SYSTEM.SMSUniqueIdentifier,SMS_R_SYSTEM.ResourceDomainORWorkgroup,SMS_R_SYSTEM.Client from SMS_R_System inner join SMS_G_System_FIRMWARE on SMS_G_System_FIRMWARE.ResourceId = SMS_R_System.ResourceId where SMS_G_System_FIRMWARE.UEFI = 0
+
+# Gibt Clients OHNE SecureBoot zurück
+select SMS_R_SYSTEM.ResourceID,SMS_R_SYSTEM.ResourceType,SMS_R_SYSTEM.Name,SMS_R_SYSTEM.SMSUniqueIdentifier,SMS_R_SYSTEM.ResourceDomainORWorkgroup,SMS_R_SYSTEM.Client from SMS_R_System inner join SMS_G_System_FIRMWARE on SMS_G_System_FIRMWARE.ResourceID = SMS_R_System.ResourceId where SMS_G_System_FIRMWARE.SecureBoot = 0 order by SMS_R_System.Name
+
+# Gibt Clients mit bestimmter CPU zurück
+select SMS_R_SYSTEM.ResourceID,SMS_R_SYSTEM.ResourceType,SMS_R_SYSTEM.Name,SMS_R_SYSTEM.SMSUniqueIdentifier,SMS_R_SYSTEM.ResourceDomainORWorkgroup,SMS_R_SYSTEM.Client from SMS_R_System inner join SMS_G_System_PROCESSOR on SMS_G_System_PROCESSOR.ResourceID = SMS_R_System.ResourceId where SMS_G_System_PROCESSOR.Name in ("11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz","11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz","Intel(R) Core(TM) i3-1005G1 CPU @ 1.20GHz","Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz","Intel(R) Core(TM) i5-10500 CPU @ 3.10GHz","Intel(R) Core(TM) i5-8265U CPU @ 1.60GHz","Intel(R) Core(TM) i5-8350U CPU @ 1.70GHz","Intel(R) Core(TM) i5-8365U CPU @ 1.60GHz","Intel(R) Core(TM) i5-9500 CPU @ 3.00GHz","Intel(R) Core(TM) i7-10510U CPU @ 1.80GHz","Intel(R) Core(TM) i7-10610U CPU @ 1.80GHz","Intel(R) Core(TM) i7-1065G7 CPU @ 1.30GHz","Intel(R) Core(TM) i7-8665U CPU @ 1.90GHz","Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz","Intel(R) Core(TM) i9-10885H CPU @ 2.40GHz")
